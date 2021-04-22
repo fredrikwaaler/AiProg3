@@ -6,15 +6,21 @@ from agent.split_gd import SplitGD
 from agent.critic import Critic
 
 
-class CriticNN(Critic):
-    def __init__(self, dims, learning_rate, eli_decay, discount_factor):
-        super().__init__(learning_rate=learning_rate,
-                         eli_decay=eli_decay, discount_factor=discount_factor)
-        self.dims = dims
+class Critic:
+    def __init__(self, config, mapping):
+        self.learning_rate = config["learning_rate"]
+        self.eli_decay = config["eli_decay"]
+        self.discount_factor = config["discount_factor"]
+        self.dims = create_dims(
+            internal_dims=config["internal_dims"], mapping=mapping)
         self.model = self.gennet(dims, learning_rate=self.learning_rate)
         self.splitGD = SplitGD(self.model, self.learning_rate,
                                self.discount_factor, self.eli_decay)
         self.studied = []
+
+    @staticmethod
+    def create_dims(internal_dims, mapping):
+        return [int(math.sqrt(len(mapping))) ** 2 + 1] + internal_dims + [1]
 
     def reset_eli_dict(self):
         """
