@@ -1,0 +1,47 @@
+Critic:
+  #Learning rate
+  learning_rate: 0.0001
+
+  #Discount Factor
+  discount_factor: 0.9
+
+  #Eligibility decay
+  eli_decay: 0.85
+
+  dims: !!python/tuple [32]
+
+Actor:
+  #Learning rate
+  learning_rate: 0.7
+
+  #Discount Factor
+  discount_factor: 0.9
+
+  #Eligibility decay
+  eli_decay: 0.85
+
+  #Epsilon
+  epsilon: 1
+
+  #Final epsilon
+  final_epsilon: 0.001
+
+Environment:
+  #Initial state
+  open_cells: [!!python/tuple [0.6, 0]] # position, velocity
+
+  #Step reward
+  step_reward: 1
+
+  #Final reward
+  final_reward: 10
+
+  #Loser penalty
+  loser_penalty: -20
+
+  # coarseness : number of state representations over the whole state space
+  coarseness:
+
+Training:
+  #Number of training episodes
+  number_of_episodes: 500
