@@ -31,12 +31,22 @@ class CoarseCoder:
                 pos, velocity, self.pos_range, self.velocity_range
             ))
 
+        # Raise error if overlap between buckets is larger than the range of the bucket
+        range_pos = (abs(self.pos_range[0]) +
+                     abs(self.pos_range[1]))/self.granularity[0]
+        range_vel = (
+            abs(self.velocity_range[0]) + abs(self.velocity_range[1]))/self.granularity[1]
+        if pos_overlap > range_pos or velocity_overlap > range_vel:
+            raise ValueError("Overlap of buckets is larger than range of the bucket. Ranges: position: {} & velocity: {}. Overlaps: position: {} & velocity: {}".format(
+                range_pos, range_vel, self.pos_overlap, self.velocity_overlap
+            ))
+
         coarse_array = self._create_empty_encoding_df()
         for vel_bin, row in coarse_array.iterrows():
             for pos_bin, val in row.iteritems():
                 if self._value_in_bin(velocity, vel_bin) and self._value_in_bin(pos, pos_bin):
                     coarse_array.loc[[vel_bin], [pos_bin]] = 1
-        
+
         return coarse_array.to_numpy()
 
     @staticmethod
@@ -58,12 +68,14 @@ class CoarseCoder:
         encoding_array = []
 
         # Create the bins for position
-        pos_starts = np.linspace(self.pos_range[0], self.pos_range[1], self.granularity[0] + 1)[:-1]
+        pos_starts = np.linspace(
+            self.pos_range[0], self.pos_range[1], self.granularity[0] + 1)[:-1]
         pos_ends = np.array(np.linspace(self.pos_range[0], self.pos_range[1], self.granularity[0] + 1) +
                             self.pos_overlap)[1:]
         pos_bins = self._create_axis_bins(pos_starts, pos_ends)
         # Create the bins for velocity
-        vel_starts = np.linspace(self.velocity_range[0], self.velocity_range[1], self.granularity[1] + 1)[:-1]
+        vel_starts = np.linspace(
+            self.velocity_range[0], self.velocity_range[1], self.granularity[1] + 1)[:-1]
         vel_ends = np.array(np.linspace(self.velocity_range[0], self.velocity_range[1], self.granularity[1] + 1) +
                             self.velocity_overlap)[1:]
         vel_bins = self._create_axis_bins(vel_starts, vel_ends)
