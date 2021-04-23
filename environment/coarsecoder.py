@@ -4,7 +4,7 @@ import pandas as pd
 
 class CoarseCoder:
 
-    def __init__(self, pos_overlap, velocity_overlap, granularity, pos_range=(-1.2, 0.6), velocity_range=(-0.07, 0.07)):
+    def __init__(self, config, pos_range=(-1.2, 0.6), velocity_range=(-0.07, 0.07)):
         """
         Defines the parameters the encoder will use when encoding.
         :param granularity: How many 'buckets' to sort each axis into as tuple (pos-granularity, vel-granularity)
@@ -13,11 +13,11 @@ class CoarseCoder:
         :param pos_range: The range for the position (as tuple)
         :param velocity_range: The range for the velocity (as tuple)
         """
-        self.pos_range = pos_range
-        self.pos_overlap = pos_overlap
+        self.pos_overlap = config["pos_overlap"]
+        self.velocity_overlap = config["velocity_overlap"]
+        self.granularity = config["granularity"]
         self.velocity_range = velocity_range
-        self.velocity_overlap = velocity_overlap
-        self.granularity = granularity
+        self.pos_range = pos_range
 
     def get_coarse_encoding(self, pos, velocity):
         """
