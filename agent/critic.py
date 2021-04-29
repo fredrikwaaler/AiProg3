@@ -98,7 +98,7 @@ class Critic:
                 units=dims[layer], activation=activation))
         model.add(keras.layers.Dense(
             units=dims[-1], activation=last_activation))
-        model.compile(optimizer=opt(lr=learning_rate), loss=loss)
+        model.compile(optimizer=opt(learning_rate=learning_rate), loss=loss)
         return model
 
     @staticmethod
@@ -110,5 +110,3 @@ class Critic:
                 match = True
             index += 1
         return match
-
-

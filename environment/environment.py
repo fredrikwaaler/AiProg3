@@ -35,7 +35,8 @@ class Environment:
             car.set_xdata(car_positions[i])
             car.set_ydata(car_heights[i])
 
-        anim = FuncAnimation(fig, animate, interval=100, frames=len(car_positions)-1)
+        anim = FuncAnimation(fig, animate, interval=100,
+                             frames=len(car_positions)-1)
         anim.save('filename.mp4')
 
         plt.draw()
@@ -59,8 +60,8 @@ class Environment:
     def perform_action(self, action):
         self.car.update_velocity_and_position(action)
         pos, _, init_pos = self.car.get_state()
-        r = self.final_reward * (math.cos(3 * (abs(pos) + math.pi / 2)))
-        reward = r**2 if pos > init_pos else r**2 / 5
+        r = self.final_reward * (math.cos(3 * (pos + math.pi / 2)))
+        reward = r if pos > init_pos else r / 5
         reward = self.loser_penalty if self.steps == self.max_steps - 1 else reward
 
         # TODO: implement exponential reward if necessary

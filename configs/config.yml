@@ -8,7 +8,7 @@ Critic:
   #Eligibility decay
   eli_decay: 0.85
 
-  internal_dims: !!python/list [32]
+  internal_dims: !!python/list [24]
 
 Actor:
   #Learning rate
