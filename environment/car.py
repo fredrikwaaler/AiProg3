@@ -5,8 +5,9 @@ class Car:
 
     def __init__(self, config):
         self.initial_position = config["initial_state"][0]
-        self.position = config["initial_state"][0]
-        self.velocity = config["initial_state"][1]
+        self.position = config["initial_state"][0][0]
+        print(config["initial_state"][0][1])
+        self.velocity = config["initial_state"][0][1]
         self.maxv = 0.07
         self.minv = -0.07
         self.maxp = 0.6

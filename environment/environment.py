@@ -3,14 +3,13 @@ import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.animation import FuncAnimation
 from environment.coarsecoder import CoarseCoder
-from environemtn.car import Car
+from environment.car import Car
 
 
 class Environment:
 
     def __init__(self, config):
         self.config = config
-        self.coarseness = config["coarseness"]
         self.max_steps = config["max_steps"]
         self.final_reward = config["final_reward"]
         self.loser_penalty = config["loser_penalty"]
@@ -59,9 +58,9 @@ class Environment:
     def perform_action(self, action):
         self.car.update_velocity_and_position(action)
         pos, _, init_pos = self.car.get_state()
+        reward = self.loser_penalty if self.steps == self.max_steps - 1 else 0
         reward = self.finalreward * \
-            (math.cos(3*(pos+math.pi/2))) if pos > init_pos else 0
-        reward = self.loser_penalty if self.steps == self.max_steps - 1 else reward
+            (math.cos(3*(pos+math.pi/2))) if pos > init_pos else reward
         return reward
 
     def new_simulation(self):

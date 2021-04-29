@@ -104,6 +104,6 @@ class CoarseCoder:
         return bins
 
 
-if __name__ == '__main__':
-    a = CoarseCoder(0.05, 0.05, (10, 10))
-    print(a.get_coarse_encoding(0.5, 0.07))
+# if __name__ == '__main__':
+#    a = CoarseCoder(0.05, 0.05, (10, 10))
+ #   print(a.get_coarse_encoding(0.5, 0.07))

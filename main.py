@@ -32,7 +32,8 @@ def main():
     """
 
     env = Environment(env_cfg)
-    critic = Critic(critic_cfg)
+    granularity = env_cfg["granularity"]
+    critic = Critic(critic_cfg, granularity)
     actor = Actor(actor_cfg)
 
     episodes = training_cfg["number_of_episodes"]

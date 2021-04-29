@@ -8,7 +8,7 @@ Critic:
   #Eligibility decay
   eli_decay: 0.85
 
-  dims: !!python/tuple [32]
+  internal_dims: !!python/tuple [32]
 
 Actor:
   #Learning rate
@@ -39,11 +39,17 @@ Environment:
   #Loser penalty
   loser_penalty: -20
 
-  # coarseness : number of state representations (boxes) over the whole state space
-  coarseness: 20
+  # granularity : number of state representations (boxes) over the whole state space
+  granularity: [!!python/tuple [10, 10]]
 
   # max number of steps
   max_steps: 1000
+
+  # overlap between position bins
+  pos_overlap: 0.05
+
+  # overlap between velocity bins
+  velocity_overlap: 0.05
 
 Training:
   #Number of training episodes

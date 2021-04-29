@@ -3,24 +3,23 @@ import numpy as np
 import tensorflow as tf
 from tensorflow import keras
 from agent.split_gd import SplitGD
-from agent.critic import Critic
 
 
 class Critic:
-    def __init__(self, config, mapping):
+    def __init__(self, config, granularity):
         self.learning_rate = config["learning_rate"]
         self.eli_decay = config["eli_decay"]
         self.discount_factor = config["discount_factor"]
         self.dims = create_dims(
-            internal_dims=config["internal_dims"], mapping=mapping)
+            internal_dims=config["internal_dims"], granularity=granularity)
         self.model = self.gennet(dims, learning_rate=self.learning_rate)
         self.splitGD = SplitGD(self.model, self.learning_rate,
                                self.discount_factor, self.eli_decay)
         self.studied = []
 
     @staticmethod
-    def create_dims(internal_dims, mapping):
-        return [int(math.sqrt(len(mapping))) ** 2 + 1] + internal_dims + [1]
+    def create_dims(internal_dims, granularity):
+        return [granularity[0]*granularity[1]] + internal_dims + [1]
 
     def reset_eli_dict(self):
         """
@@ -82,7 +81,7 @@ class Critic:
         # dims[0] depends on board size
         return tf.reshape(tensor, [1, self.dims[0]])
 
-    def gennet(self, dims, learning_rate, opt='SGD', loss='MeanSquaredError()', activation="relu", last_activatiion="sigmoid"):
+    def gennet(self, dims, learning_rate, opt='SGD', loss='MeanSquaredError()', activation="relu", last_activation="sigmoid"):
         """
         Compiles a keras model with dimensions given by dims
         :param dims: list(int)
@@ -97,6 +96,6 @@ class Critic:
             model.add(keras.layers.Dense(
                 units=dims[layer], activation=activation))
         model.add(keras.layers.Dense(
-            units=dims[-1], activation=last_activatiion))
+            units=dims[-1], activation=last_activation))
         model.compile(optimizer=opt(lr=learning_rate), loss=loss)
         return model
