@@ -72,8 +72,6 @@ class Environment:
                 r = 1
             else:
                 r = 0
-           # r = 5*abs(vel) + 0.5 * math.cos(3 * (pos + math.pi / 2))
-        # reward = self.loser_penalty if self.steps == self.max_steps - 1 else reward
         return r
 
     def perform_action2(self, action):
