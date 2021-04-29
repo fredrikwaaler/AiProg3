@@ -18,3 +18,5 @@ ENV/
 
 /shelf/
 /workspace.xml
+
+*.mp4
