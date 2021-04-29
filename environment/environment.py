@@ -20,7 +20,8 @@ class Environment:
 
     def visualize_landscape(self, car_positions):
         # the relationship between x and height (depth) is given by:
-        car_heights = [math.cos(3 * (pos + math.pi / 2)) for pos in car_positions]
+        car_heights = [math.cos(3 * (pos + math.pi / 2))
+                       for pos in car_positions]
         fig, ax = plt.subplots(figsize=(5, 3))
         ax.set(xlim=(self.car.minp, self.car.maxp), ylim=(-1.5, 1.5))
 
@@ -34,7 +35,8 @@ class Environment:
             car.set_xdata(car_positions[i])
             car.set_ydata(car_heights[i])
 
-        anim = FuncAnimation(fig, animate, interval=1000, frames=len(car_positions)-1)
+        anim = FuncAnimation(fig, animate, interval=100,
+                             frames=len(car_positions)-1)
         anim.save('filename.mp4')
 
         plt.draw()
@@ -72,7 +74,12 @@ class Environment:
         pos, vel, _ = self.car.get_state()
         return self.coarse_code.get_coarse_encoding(pos, vel)
 
+    def get_position(self):
+        pos, _, _ = self.car.get_state()
+        return pos
 
+
+"""
 if __name__ == '__main__':
     config = yaml.full_load(open("/configs/config.yml"))
     env_cfg = config["Environment"]
@@ -87,3 +94,4 @@ if __name__ == '__main__':
 
 
     env.visualize_landscape([-1.0, 0.2, -0.6, 0.3, 0.4])
+"""

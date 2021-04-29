@@ -38,6 +38,7 @@ def main():
 
     episodes = training_cfg["number_of_episodes"]
     steps_per_episode = []
+    positions = []
 
     for episode in tqdm(range(episodes), desc=f"Playing {episodes} episodes", colour='#39ff14'):
         env.new_simulation()
@@ -67,23 +68,26 @@ def main():
                 actor.update_policy_dict(
                     state=str(sap[0]), action=str(sap[1]), td_err=td_err)
 
+            positions.append(env.get_position())
+
         print(env.steps)
+        if episode == 0 or episode == 999:
+            env.visualize_landscape(positions)
         steps_per_episode.append(env.steps)
 
     plot_learning(steps_per_episode)
 
     # Enable history tracking to visualize final simulation
-    env.new_simulation()  # track_history=True)
+    env.new_simulation()
 
     print(f"Actor final epsilon: {actor.epsilon}")
     actor.epsilon = 0  # Set exploration to 0
     print("Attempting final simulation to show you how smart I am now")
-    while not env.reached_top() or not env.reached_max_steps():
+    while not env.reached_top() and not env.reached_max_steps():
         current_state = env.get_state()
         legal_actions = env.get_actions()
         action = actor.get_action(current_state, legal_actions)
         env.perform_action(action)
-    # env.board.visualize(0.1)
 
 
 def plot_learning(steps_per_episode):
