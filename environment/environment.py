@@ -4,6 +4,7 @@ import matplotlib.pyplot as plt
 from matplotlib.animation import FuncAnimation
 from environment.coarsecoder import CoarseCoder
 from environment.car import Car
+import yaml
 
 
 class Environment:
@@ -17,25 +18,24 @@ class Environment:
         self.car = Car(config)
         self.steps = 0
 
-    def visualize_landscape(self, position):
+    def visualize_landscape(self, car_positions):
         # the relationship between x and height (depth) is given by:
-        height = math.cos(3*(position+math.pi/2))
+        car_heights = [math.cos(3 * (pos + math.pi / 2)) for pos in car_positions]
         fig, ax = plt.subplots(figsize=(5, 3))
-        ax.set(xlim=(self.car.minp, self.car.maxp), ylim=(0, 1.5))
+        ax.set(xlim=(self.car.minp, self.car.maxp), ylim=(-1.5, 1.5))
 
         x = np.linspace(self.car.minp, self.car.maxp, 91)
-        t = np.linspace(0, 1.5, 30)
-        X2, T2 = np.meshgrid(x, t)
+        y = [math.cos(3 * (pos + math.pi / 2)) for pos in x]
 
-        height = math.cos(3*(T2+math.pi/2))
-        F = 0.9*height*np.sinc(X2*(1 + height))
-
-        line = ax.plot(x, F[0, :], color='k', lw=2)[0]
+        ax.plot(x, y, 'k', lw=1)
+        car = ax.plot(car_positions[0], car_heights[0], 'ro', lw=4)[0]
 
         def animate(i):
-            line.set_ydata(F[i, :])
+            car.set_xdata(car_positions[i])
+            car.set_ydata(car_heights[i])
 
-        anim = FuncAnimation(fig, animate, interval=100, frames=len(t)-1)
+        anim = FuncAnimation(fig, animate, interval=1000, frames=len(car_positions)-1)
+        anim.save('filename.mp4')
 
         plt.draw()
         plt.show()
@@ -60,7 +60,7 @@ class Environment:
         pos, _, init_pos = self.car.get_state()
         reward = self.loser_penalty if self.steps == self.max_steps - 1 else 0
         reward = self.final_reward * \
-            (math.cos(3*(pos+math.pi/2))) if pos > init_pos else reward
+            (math.cos(3*(abs(pos)+math.pi/2))) if pos > init_pos else reward
         # TODO: implement exponential reward if necessary
         return reward
 
@@ -71,3 +71,19 @@ class Environment:
     def get_state(self):
         pos, vel, _ = self.car.get_state()
         return self.coarse_code.get_coarse_encoding(pos, vel)
+
+
+if __name__ == '__main__':
+    config = yaml.full_load(open("/configs/config.yml"))
+    env_cfg = config["Environment"]
+    env = Environment(env_cfg)
+
+    x = np.linspace(-3, 3, 91)
+    t = np.linspace(1, 25, 30)
+    X2, T2 = np.meshgrid(x, t)
+
+    sinT2 = np.sin(2 * np.pi * T2 / T2.max())
+    F = 0.9 * sinT2 * np.sinc(X2 * (1 + sinT2))
+
+
+    env.visualize_landscape([-1.0, 0.2, -0.6, 0.3, 0.4])

@@ -44,8 +44,7 @@ def main():
         path = []
         critic.reset_eli_dict()
         actor.reset_eli_dict()
-        while not env.reached_top() or not env.reached_max_steps():
-            print(env.steps)
+        while not env.reached_top() and not env.reached_max_steps():
             env.update_steps()
             current_state = copy(env.get_state())
             legal_actions = env.get_actions()
@@ -68,7 +67,8 @@ def main():
                 actor.update_policy_dict(
                     state=str(sap[0]), action=str(sap[1]), td_err=td_err)
 
-        steps.append(env.get_steps())
+        print(env.steps)
+        steps_per_episode.append(env.steps)
 
     plot_learning(steps_per_episode)
 

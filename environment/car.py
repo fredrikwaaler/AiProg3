@@ -33,6 +33,6 @@ class Car:
         return self.position, self.velocity, self.initial_position
 
     def reached_top(self):
-        if math.cos(3*(self.position+math.pi/2)) > 0.97 and self.position > self.initial_position:
+        if round(self.position, 2) == 0.5:
             return True
         return False

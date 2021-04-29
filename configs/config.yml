@@ -53,4 +53,4 @@ Environment:
 
 Training:
   #Number of training episodes
-  number_of_episodes: 500
+  number_of_episodes: 100
