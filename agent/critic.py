@@ -53,7 +53,7 @@ class Critic:
         :param reward: integer
         """
         # Initialize unseen states as random float between 0 and 1
-        if list(current_state) not in [list(a) for a in self.studied]:
+        if self.nparray_in_2dnparray(current_state, self.studied):
             # if current_state not in self.studied:
             self.studied.append(current_state)
             state_value = random.uniform(0, 1)
@@ -63,7 +63,7 @@ class Critic:
             state_value = self.splitGD.model(s).numpy()[0][0]
 
         # Initialize unseen "next" states as random float between 0 and 1 as well
-        if list(next_state) not in [list(a) for a in self.studied]:
+        if self.nparray_in_2dnparray(next_state, self.studied):
             state_prime_value = random.uniform(0, 1)
         else:
             # Predict value of new state
@@ -100,3 +100,15 @@ class Critic:
             units=dims[-1], activation=last_activation))
         model.compile(optimizer=opt(lr=learning_rate), loss=loss)
         return model
+
+    @staticmethod
+    def nparray_in_2dnparray(np_arr, two_d_np_arr):
+        match = False
+        index = 0
+        while not match and index < len(two_d_np_arr):
+            if np.array_equal(np_arr, two_d_np_arr[index]):
+                match = True
+            index += 1
+        return match
+
+

@@ -45,6 +45,7 @@ def main():
         critic.reset_eli_dict()
         actor.reset_eli_dict()
         while not env.reached_top() or not env.reached_max_steps():
+            print(env.steps)
             env.update_steps()
             current_state = copy(env.get_state())
             legal_actions = env.get_actions()
