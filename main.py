@@ -78,7 +78,7 @@ def main():
     print(f"Actor final epsilon: {actor.epsilon}")
     actor.epsilon = 0  # Set exploration to 0
     print("Attempting final simulation to show you how smart I am now")
-    while not env.reached_top() or not env.reached_max_steps():
+    while not env.reached_top() and not env.reached_max_steps():
         current_state = env.get_state()
         legal_actions = env.get_actions()
         action = actor.get_action(current_state, legal_actions)
