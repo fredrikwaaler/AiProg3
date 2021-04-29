@@ -60,7 +60,7 @@ class Environment:
         self.car.update_velocity_and_position(action)
         pos, _, init_pos = self.car.get_state()
         r = self.final_reward * (math.cos(3 * (abs(pos) + math.pi / 2)))
-        reward = r**2 if pos > init_pos else r**2 / 5
+        reward = r if pos > init_pos else r / 5
         reward = self.loser_penalty if self.steps == self.max_steps - 1 else reward
 
         # TODO: implement exponential reward if necessary
