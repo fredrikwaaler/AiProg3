@@ -37,12 +37,13 @@ def main():
     actor = Actor(actor_cfg)
 
     episodes = training_cfg["number_of_episodes"]
+    visualize_episodes = training_cfg["visualize_episodes"]
     steps_per_episode = []
-    positions = []
 
     for episode in tqdm(range(episodes), desc=f"Playing {episodes} episodes", colour='#39ff14'):
         env.new_simulation()
         path = []
+        positions = []
         critic.reset_eli_dict()
         actor.reset_eli_dict()
         while not env.reached_top() and not env.reached_max_steps():
@@ -70,8 +71,8 @@ def main():
 
             positions.append(env.get_position())
 
-        print(env.steps)
-        if episode == 0 or episode == 999:
+        print("steps used in this episode", env.steps)
+        if episode in visualize_episodes:
             env.visualize_landscape(positions)
         steps_per_episode.append(env.steps)
 
