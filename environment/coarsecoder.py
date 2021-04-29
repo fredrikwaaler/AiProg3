@@ -130,36 +130,41 @@ class TileEncoder:
 
     def _init_tiles(self):
         """Create five tiles, four displaced from the one in the center"""
-        return_tiles = [self.create_empty_tile(self.pos_range, self.velocity_range, self.granularity)]
+        return_tiles = [self.create_empty_tile(
+            self.pos_range, self.velocity_range, self.granularity)]
         tile_size = (abs(self.pos_range[0] - self.pos_range[1]) / self.granularity[0],
                      abs(self.velocity_range[0] - self.velocity_range[1]) / self.granularity[1])
         displacement_pos = random() * tile_size[0]
         displacement_vel = random() * tile_size[1]
         # Create tile move upwards right
         return_tiles.append(self.create_empty_tile((self.pos_range[0] + displacement_pos, self.pos_range[1] + displacement_pos),
-                               (self.velocity_range[0] + displacement_vel, self.velocity_range[1] + displacement_vel),
-                               self.granularity))
+                                                   (self.velocity_range[0] + displacement_vel,
+                                                    self.velocity_range[1] + displacement_vel),
+                                                   self.granularity))
 
         displacement_pos = random() * tile_size[0]
         displacement_vel = random() * tile_size[1]
         # Create tile move upwards left
         return_tiles.append(self.create_empty_tile((self.pos_range[0] + displacement_pos, self.pos_range[1] + displacement_pos),
-                               (self.velocity_range[0] - displacement_vel, self.velocity_range[1] - displacement_vel),
-                               self.granularity))
+                                                   (self.velocity_range[0] - displacement_vel,
+                                                    self.velocity_range[1] - displacement_vel),
+                                                   self.granularity))
 
         displacement_pos = random() * tile_size[0]
         displacement_vel = random() * tile_size[1]
         # Create tile move down right
         return_tiles.append(self.create_empty_tile((self.pos_range[0] - displacement_pos, self.pos_range[1] - displacement_pos),
-                               (self.velocity_range[0] + displacement_vel, self.velocity_range[1] + displacement_vel),
-                               self.granularity))
+                                                   (self.velocity_range[0] + displacement_vel,
+                                                    self.velocity_range[1] + displacement_vel),
+                                                   self.granularity))
 
         displacement_pos = random() * tile_size[0]
         displacement_vel = random() * tile_size[1]
         # Create tile move down left
         return_tiles.append(self.create_empty_tile((self.pos_range[0] - displacement_pos, self.pos_range[1] - displacement_pos),
-                               (self.velocity_range[0] - displacement_vel, self.velocity_range[1] - displacement_vel),
-                               self.granularity))
+                                                   (self.velocity_range[0] - displacement_vel,
+                                                    self.velocity_range[1] - displacement_vel),
+                                                   self.granularity))
 
         return return_tiles
 
@@ -168,7 +173,8 @@ class TileEncoder:
 
         positions_start = np.linspace(
             pos_range[0], pos_range[1], granularity[0] + 1)[:-1]
-        positions_end = positions_start + abs((positions_start[1] - positions_start[0]))
+        positions_end = positions_start + \
+            abs((positions_start[1] - positions_start[0]))
 
         vel_starts = np.linspace(
             velocity_range[0], velocity_range[1], granularity[1] + 1)[:-1]
@@ -213,4 +219,3 @@ class TileEncoder:
 if __name__ == '__main__':
     a = TileEncoder((-1.21, 0.61), (-0.071, 0.071), (4, 4))
     print(a.get_encoding(0.0, 0.03))
-

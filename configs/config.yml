@@ -1,6 +1,6 @@
 Critic:
   #Learning rate
-  learning_rate: 0.005
+  learning_rate: 0.01
 
   #Discount Factor
   discount_factor: 0.99
@@ -59,4 +59,4 @@ Training:
   number_of_episodes: 100
 
   #Episodes to visualize
-  visualize_episodes: [0, 20, 50, 75, 100]
+  visualize_episodes: [20, 50, 75, 99]

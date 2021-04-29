@@ -21,6 +21,18 @@ critic_cfg = config["Critic"]
 training_cfg = config["Training"]
 
 
+def plot_learning(steps_per_episode):
+    """
+    Plots remaining pieces after each episode during a full run of training
+    Should converge to one if the agent is learning
+    """
+    episode = [i for i in range(len(steps_per_episode))]
+    plt.plot(episode, steps_per_episode)
+    plt.xlabel("Episode number")
+    plt.ylabel("Steps")
+    plt.show()
+
+
 def main():
     """
     Sets the parameters for the Environment, Critic, and Actor according to the imported config file.
@@ -89,18 +101,6 @@ def main():
         legal_actions = env.get_actions()
         action = actor.get_action(current_state, legal_actions)
         env.perform_action(action)
-
-
-def plot_learning(steps_per_episode):
-    """
-    Plots remaining pieces after each episode during a full run of training
-    Should converge to one if the agent is learning
-    """
-    episode = [i for i in range(len(steps_per_episode))]
-    plt.plot(episode, steps_per_episode)
-    plt.xlabel("Episode number")
-    plt.ylabel("Steps")
-    plt.show()
 
 
 main()
