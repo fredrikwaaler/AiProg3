@@ -59,14 +59,15 @@ class Environment:
         self.car.update_velocity_and_position(action)
         pos, _, init_pos = self.car.get_state()
         reward = self.loser_penalty if self.steps == self.max_steps - 1 else 0
-        reward = self.finalreward * \
+        reward = self.final_reward * \
             (math.cos(3*(pos+math.pi/2))) if pos > init_pos else reward
+        # TODO: implement exponential reward if necessary
         return reward
 
     def new_simulation(self):
         self.steps = 0
-        self.car(self.config)
+        self.car = Car(self.config)
 
     def get_state(self):
-        pos, vel = self.car.get_state()
+        pos, vel, _ = self.car.get_state()
         return self.coarse_code.get_coarse_encoding(pos, vel)

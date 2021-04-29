@@ -32,11 +32,12 @@ class CoarseCoder:
             ))
 
         # Raise error if overlap between buckets is larger than the range of the bucket
-        range_pos = (abs(self.pos_range[0]) +
-                     abs(self.pos_range[1]))/self.granularity[0]
+        range_pos = (
+            abs(self.pos_range[0]-self.pos_range[1]))/self.granularity[0]
+
         range_vel = (
-            abs(self.velocity_range[0]) + abs(self.velocity_range[1]))/self.granularity[1]
-        if pos_overlap > range_pos or velocity_overlap > range_vel:
+            abs(self.velocity_range[0] - self.velocity_range[1]))/self.granularity[1]
+        if self.pos_overlap > range_pos or self.velocity_overlap > range_vel:
             raise ValueError("Overlap of buckets is larger than range of the bucket. Ranges: position: {} & velocity: {}. Overlaps: position: {} & velocity: {}".format(
                 range_pos, range_vel, self.pos_overlap, self.velocity_overlap
             ))

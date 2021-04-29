@@ -10,9 +10,9 @@ class Critic:
         self.learning_rate = config["learning_rate"]
         self.eli_decay = config["eli_decay"]
         self.discount_factor = config["discount_factor"]
-        self.dims = create_dims(
+        self.dims = Critic.create_dims(
             internal_dims=config["internal_dims"], granularity=granularity)
-        self.model = self.gennet(dims, learning_rate=self.learning_rate)
+        self.model = self.gennet(self.dims, learning_rate=self.learning_rate)
         self.splitGD = SplitGD(self.model, self.learning_rate,
                                self.discount_factor, self.eli_decay)
         self.studied = []
@@ -53,7 +53,8 @@ class Critic:
         :param reward: integer
         """
         # Initialize unseen states as random float between 0 and 1
-        if current_state not in self.studied:
+        if list(current_state) not in [list(a) for a in self.studied]:
+            # if current_state not in self.studied:
             self.studied.append(current_state)
             state_value = random.uniform(0, 1)
         else:
@@ -62,7 +63,7 @@ class Critic:
             state_value = self.splitGD.model(s).numpy()[0][0]
 
         # Initialize unseen "next" states as random float between 0 and 1 as well
-        if next_state not in self.studied:
+        if list(next_state) not in [list(a) for a in self.studied]:
             state_prime_value = random.uniform(0, 1)
         else:
             # Predict value of new state

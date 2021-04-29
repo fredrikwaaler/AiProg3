@@ -72,7 +72,7 @@ def main():
     plot_learning(steps_per_episode)
 
     # Enable history tracking to visualize final simulation
-    env.new_simulation(track_history=True)
+    env.new_simulation()  # track_history=True)
 
     print(f"Actor final epsilon: {actor.epsilon}")
     actor.epsilon = 0  # Set exploration to 0
@@ -82,7 +82,7 @@ def main():
         legal_actions = env.get_actions()
         action = actor.get_action(current_state, legal_actions)
         env.perform_action(action)
-    env.board.visualize(0.1)
+    # env.board.visualize(0.1)
 
 
 def plot_learning(steps_per_episode):

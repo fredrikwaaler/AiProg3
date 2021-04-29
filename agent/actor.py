@@ -1,5 +1,7 @@
 # actions: 1) apply a small force (-1) that accelerates the cart to the left,
 # 2) apply a small force (+1) that accelerates it to the right, and 3) apply no force (0)
+# You will use on-policy RL for this assignment, with the policy based directly on the Q(s,a) values from the neural
+# network and making an ε-greedy choice among the three possible actions during each timestep.
 
 import random
 from collections import defaultdict
@@ -11,7 +13,7 @@ class Actor:
     Uses dictionaries to keep track of the value of each SAP pair and eligibility.
     """
 
-    def __init__(self, learning_rate, discount_factor, eli_decay, epsilon, epsilon_decay):
+    def __init__(self, config):
         """
         Initializes an actor using a default value of 0 to allow accumulated values.
         :param learning_rate: float
@@ -19,13 +21,13 @@ class Actor:
         :param eli_decay: float
         :param epsilon: float
         """
-        self.epsilon = epsilon
-        self.epsilon_decay = epsilon_decay
+        self.epsilon = config["epsilon"]
+        self.epsilon_decay = config["epsilon_decay"]
         self.policy_dict = defaultdict(lambda: 0)
         self.eli_dict = {}  # defaultdict(lambda: 0)
-        self.discount_factor = discount_factor
-        self.eli_decay = eli_decay
-        self.learning_rate = learning_rate
+        self.discount_factor = config["discount_factor"]
+        self.eli_decay = config["eli_decay"]
+        self.learning_rate = config["learning_rate"]
 
     def update_policy_dict(self, state, action, td_err):
         """

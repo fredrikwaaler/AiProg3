@@ -8,7 +8,7 @@ Critic:
   #Eligibility decay
   eli_decay: 0.85
 
-  internal_dims: !!python/tuple [32]
+  internal_dims: !!python/list [32]
 
 Actor:
   #Learning rate
@@ -23,12 +23,12 @@ Actor:
   #Epsilon
   epsilon: 1
 
-  #Final epsilon
-  final_epsilon: 0.001
+  #epsilon decay
+  epsilon_decay: 0.99
 
 Environment:
   #Initial state
-  initial_state: [!!python/tuple [-0.6, 0]] # list: position (usually in the range [-0.6, -0.4]), velocity
+  initial_state: !!python/list [-0.6, 0] # list: position (usually in the range [-0.6, -0.4]), velocity
 
   #Step reward
   step_reward: 1
@@ -40,7 +40,7 @@ Environment:
   loser_penalty: -20
 
   # granularity : number of state representations (boxes) over the whole state space
-  granularity: [!!python/tuple [10, 10]]
+  granularity: !!python/list [10, 10]
 
   # max number of steps
   max_steps: 1000
@@ -49,7 +49,7 @@ Environment:
   pos_overlap: 0.05
 
   # overlap between velocity bins
-  velocity_overlap: 0.05
+  velocity_overlap: 0.004
 
 Training:
   #Number of training episodes
