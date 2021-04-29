@@ -2,7 +2,7 @@ import math
 import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.animation import FuncAnimation
-from environment.coarsecoder import CoarseCoder
+from environment.coarsecoder import CoarseCoder, TileEncoder
 from environment.car import Car
 import yaml
 
@@ -14,7 +14,7 @@ class Environment:
         self.max_steps = config["max_steps"]
         self.final_reward = config["final_reward"]
         self.loser_penalty = config["loser_penalty"]
-        self.coarse_code = CoarseCoder(config)
+        self.coarse_code = TileEncoder(config)
         self.car = Car(config)
         self.steps = 0
 
@@ -35,7 +35,8 @@ class Environment:
             car.set_xdata(car_positions[i])
             car.set_ydata(car_heights[i])
 
-        anim = FuncAnimation(fig, animate, interval=100, frames=len(car_positions)-1)
+        anim = FuncAnimation(fig, animate, interval=100,
+                             frames=len(car_positions)-1)
         anim.save('filename.mp4')
 
         plt.draw()
@@ -57,14 +58,25 @@ class Environment:
         return [1, 0, -1]
 
     def perform_action(self, action):
+        old_pos, old_vel, _ = self.car.get_state()
         self.car.update_velocity_and_position(action)
-        pos, _, init_pos = self.car.get_state()
-        r = self.final_reward * (math.cos(3 * (abs(pos) + math.pi / 2)))
-        reward = r if pos > init_pos else r / 5
-        reward = self.loser_penalty if self.steps == self.max_steps - 1 else reward
+        pos, vel, _ = self.car.get_state()
 
-        # TODO: implement exponential reward if necessary
-        return reward
+        if round(pos, 1) == 0.6:
+            r = 500
+        else:
+            r = -1
+        # reward = self.loser_penalty if self.steps == self.max_steps - 1 else reward
+        return r
+
+    def perform_action2(self, action):
+        # Calculate current distance from init pos
+        self.car.update_velocity_and_position(action)
+        pos, _, _ = self.car.get_state()
+        if round(pos, 1) != 0.6:
+            return -1
+        else:
+            return self.final_reward
 
     def new_simulation(self):
         self.steps = 0

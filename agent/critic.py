@@ -19,7 +19,9 @@ class Critic:
 
     @staticmethod
     def create_dims(internal_dims, granularity):
-        return [granularity[0]*granularity[1]] + internal_dims + [1]
+        if not internal_dims or internal_dims == 0:
+            return [granularity[0] * granularity[1] * 5] + [1]
+        return [granularity[0]*granularity[1] * 5] + internal_dims + [1]
 
     def reset_eli_dict(self):
         """
@@ -77,10 +79,13 @@ class Critic:
         Converts a list representation of the state to a tensor
         :param state: list(list(int))
         """
-        tensor = tf.convert_to_tensor(
-            [np.concatenate([np.array(i) for i in state])])
-        # dims[0] depends on board size
-        return tf.reshape(tensor, [1, self.dims[0]])
+        tensor = []
+        for i in range(len(state)):
+            for j in range(len(state[i])):
+                for k in range(len(state[i][j])):
+                    tensor.append(state[i][j][k])
+
+        return np.array([tensor])
 
     def gennet(self, dims, learning_rate, opt='SGD', loss='MeanSquaredError()', activation="relu", last_activation="sigmoid"):
         """
@@ -98,7 +103,7 @@ class Critic:
                 units=dims[layer], activation=activation))
         model.add(keras.layers.Dense(
             units=dims[-1], activation=last_activation))
-        model.compile(optimizer=opt(lr=learning_rate), loss=loss)
+        model.compile(optimizer=opt(learning_rate=learning_rate), loss=loss)
         return model
 
     @staticmethod
@@ -110,5 +115,3 @@ class Critic:
                 match = True
             index += 1
         return match
-
-

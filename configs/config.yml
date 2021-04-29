@@ -1,18 +1,18 @@
 Critic:
   #Learning rate
-  learning_rate: 0.0001
+  learning_rate: 0.005
 
   #Discount Factor
-  discount_factor: 0.9
+  discount_factor: 0.99
 
   #Eligibility decay
   eli_decay: 0.85
 
-  internal_dims: !!python/list [32]
+  internal_dims: 0
 
 Actor:
   #Learning rate
-  learning_rate: 0.7
+  learning_rate: 0.1
 
   #Discount Factor
   discount_factor: 0.9
@@ -24,7 +24,7 @@ Actor:
   epsilon: 1
 
   #epsilon decay
-  epsilon_decay: 0.99
+  epsilon_decay: 0.99995
 
 Environment:
   #Initial state
@@ -40,10 +40,13 @@ Environment:
   loser_penalty: -20
 
   # granularity : number of state representations (boxes) over the whole state space
-  granularity: !!python/list [10, 10]
+  granularity: !!python/list [4, 4]
 
   # max number of steps
   max_steps: 1000
+
+  pos_range: !!python/tuple [-1.21, 0.61]
+  velocity_range: !!python/tuple [-0.071, 0.071]
 
   # overlap between position bins
   pos_overlap: 0.05
@@ -56,4 +59,4 @@ Training:
   number_of_episodes: 100
 
   #Episodes to visualize
-  visualize_episodes: [0, 50, 100, 200, 999]
+  visualize_episodes: [0, 20, 50, 75, 100]
